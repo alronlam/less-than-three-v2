@@ -1,0 +1,34 @@
+questions.push(new Question(
+			"What was your favorite subject back in college?",
+			"Math", "Physical Education", "Chemistry", "Lunch Time",
+			"Glad you asked that! It's totally, guess what. Math!",
+			"Glad you asked that! It's totally, guess what. Physical Education!",
+			"Glad you asked that! It's totally, guess what. Chemistry!",
+			"Glad you asked that! It's totally, guess what. Lunch Time!",
+			"School? Bummer. I came out here to relax and we talk about school."
+			));
+questions.push(new Question(
+			"What's your favorite rock band?",
+			"The Killers", "All Time Low", "Guns n' Roses", "Foo Fighters",
+			"The Killers just kill me. <3",
+			"When I'm listening to All Time Low, I'm on an all time high.",
+			"It's definitely Guns n' Roses",
+			"Foo Fighters are my heroes.",
+			"I'm not into rock bands. They freak me out."
+			));
+
+constructor: Question(theQuestion, choice1, choice2, choice3, choice4, positive1, positive2, positive3, positive4, negative response).
+
+For stage2, the player will ask the question, and "the one" will respond positively or negatively depending on his/her random personality. "The one" will be either turned on or off by the question.
+
+The answer will be randomized as well, which is why the questions need to have 4 positive responses which incorporate the answers in them (1st will correspond to positive response for choice1, etc). Only one negative response is needed because it is a response to the question.
+
+Please create questions that could give the character a conflicting personality. Everything is randomized, no fancy algorithm is used to avoid contradicting answers to different questions.
+For example, the above question already exists, so don't create a new one like: "I hate school. It's just totally useless, isn't it?", and then the negative response would be "What? School is important!". If these two questions were used, then "the one" would have a contradicting personality.
+
+And please don't create gender specific questions. Like "What do you look for in a boy?". 
+But if you can find a way to generalize this so the question, responses, and answers are applicable to BOTH
+boty and girl, then go ahead.
+
+Lastly, please make sure positive responses are really positive, and the players won't misinterpret them as being a negative response. There are questions in code that have positive responses that sometimes sound like negative ones. Do not follow them. Those questions were made out of desperation. :)) 
+ 

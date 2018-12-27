@@ -1,0 +1,653 @@
+<html>
+<head>
+	<title> <3</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+	<script src="javascripts\jquery.js"></script>
+	<script src="javascripts\jquery.hotkeys.js"></script>
+	<script src="javascripts\key_status.js"></script>
+	<script src="javascripts\util.js"></script>
+	<script src="javascripts\sprite.js"></script>
+	<script src="javascripts\sound.js"></script>
+	<script>
+
+	function clamp(person, CANVAS_WIDTH, CANVAS_HEIGHT){
+		if(person.x < 0)
+			person.x = 0;
+		else if(person.x +person.width > CANVAS_WIDTH)
+			person.x = CANVAS_WIDTH - person.width;
+		
+		if(person.y < 0)
+			person.y = 0;
+		else if(person.y + person.height > CANVAS_HEIGHT - 80)
+			person.y = CANVAS_HEIGHT - person.height - 80;
+	}
+
+	function Person(x, y, gender, isTheOne, spriteAcc, spriteHair, spriteSkin, spriteEyes, spriteUpper, spriteLower){
+	  this.color = "#00A";
+	  this.x = x;
+	  this.y = y;
+	  this.width = 60;
+	  this.height = 114;
+	  this.gender = gender;
+	  this.acc = Sprite(spriteAcc);
+	  this.hair = Sprite(spriteHair);
+	  this.skin = Sprite(spriteSkin);
+	  this.eyes = Sprite(spriteEyes);
+	  this.upper = Sprite(spriteUpper);
+	  this.lower = Sprite(spriteLower);
+	  this.isTheOne = isTheOne;
+	  this.hasPath = false;
+	  this.clue1 = "";
+	  this.clue2 = "";
+
+	  if(isTheOne){
+		     if(spriteAcc == "acc1")	 
+			this.clue1 += "Heart on Cheek, ";
+		else if(spriteAcc == "acc2")
+			this.clue1 += "Gold Earrings, ";
+		else if(spriteAcc == "acc3")
+			this.clue1 += "Red Hair Clip, ";
+		else if(spriteAcc == "acc4")
+			this.clue1 += "Silver Earrings, ";
+
+
+		     if(spriteEyes == "eye1" || spriteEyes == "eye6" || spriteEyes == "eye11" || spriteEyes == "eye14") 
+			this.clue1 += "Green Eyes, ";
+		else if(spriteEyes == "eye2" || spriteEyes == "eye5" || spriteEyes =="eye10" || spriteEyes =="eye15")
+			this.clue1 += "Brown Eyes, ";
+		else if(spriteEyes == "eye3" || spriteEyes == "eye7" || spriteEyes =="eye9" || spriteEyes=="eye13")
+			this.clue1 += "Blue Eyes, ";
+		else if(spriteEyes =="eye4" || spriteEyes =="eye8" || spriteEyes =="eye12" || spriteEyes =="eye16")
+			this.clue1 += "Black Eyes, ";
+
+		if(spriteHair == "hair1")
+			this.clue1 += "Long Red Hair, ";
+		else if(spriteHair == "hair2")
+			this.clue1 += "Long Brown Hair, ";
+		else if(spriteHair == "hair3")
+			this.clue1 += "Black Hair in Buns, ";
+		else if(spriteHair == "hair4")
+			this.clue1 += "Short Red Hair, ";
+		else if(spriteHair == "hair5")
+			this.clue1 += "Long Blonde Hair, ";
+		else if(spriteHair == "hair6")
+			this.clue1 += "Long Black Hair, ";
+		else if(spriteHair == "hair7")
+			this.clue1 += "Pink Hair, ";
+		else if(spriteHair == "hair8")
+			this.clue1 += "Light Brown Hair, ";
+		else if(spriteHair == "hair9")
+			this.clue1 += "Short Red Hair, ";
+		else if(spriteHair == "hair10")
+			this.clue1 += "Long Blue Hair, ";
+	
+
+		if(spriteSkin == "skin1")
+			this.clue2 += "Brown Skin, ";
+		else if(spriteSkin == "skin2")
+			this.clue2 += "Tanned, ";
+		else if(spriteSkin == "skin3")
+			this.clue2 += "Dark Yellow Skin, ";
+		else if(spriteSkin == "skin4")
+			this.clue2 += "Yellow Skin, ";
+		else if(spriteSkin == "skin5")
+			this.clue2 += "White Skin, ";
+
+		if(spriteUpper == "upper1")
+			this.clue2 += "Black Tank Top, ";
+		else if(spriteUpper == "upper2")
+			this.clue2 += "Violet Top, ";
+		else if(spriteUpper == "upper3")
+			this.clue2 += "Green Vest, ";
+		else if(spriteUpper == "upper4")
+			this.clue2 += "Blue Tank Top, ";
+		else if(spriteUpper == "upper5")
+			this.clue2 += "Red Dragon Top, ";
+		else if(spriteUpper == "upper6")
+			this.clue2 += "White Top, ";
+		else if(spriteUpper == "upper7")
+			this.clue2 += "Yellow Top, ";
+		else if(spriteUpper == "upper8")
+			this.clue2 += "Light Blue Top, ";
+		else if(spriteUpper == "upper9")
+			this.clue2 += "Brown Polka-Dotted Top, ";
+		else if(spriteUpper == "upper10")
+			this.clue2 += "Green Top, ";
+
+		if(spriteLower == "lower1")
+			this.clue2 += "Black Skirt";
+		else if(spriteLower == "lower2")
+			this.clue2 += "Red Dragon Skirt";
+		else if(spriteLower == "lower3")
+			this.clue2 += "Loose Red Skirt";
+		else if(spriteLower == "lower4")
+			this.clue2 += "Blue Jeans";
+		else if(spriteLower == "lower5")
+			this.clue2 += "Blue Shorts";
+		else if(spriteLower == "lower6")
+			this.clue2 += "Green Pants";
+		else if(spriteLower == "lower7")
+			this.clue2 += "Violet Stockings";
+		else if(spriteLower == "lower8")
+			this.clue2 += "Yellow Skirt";
+		else if(spriteLower == "lower9")
+			this.clue2 += "White Skirt";
+		else if(spriteLower == "lower10")
+			this.clue2 += "White Stockings with Red Jacket Wrapped Around";
+	  }
+
+	  var path = [];
+
+	  this.draw =  function() {
+	  	this.skin.draw(canvas, this.x, this.y);
+	  	this.lower.draw(canvas, this.x, this.y);
+	    this.upper.draw(canvas, this.x, this.y);
+	    this.eyes.draw(canvas, this.x, this.y);
+	    this.hair.draw(canvas, this.x, this.y);
+	    this.acc.draw(canvas, this.x, this.y);
+	  };
+
+	  this.drawScaled =  function(scale) {
+	  	this.skin.drawScaled (canvas, this.x, this.y, scale);
+	  	this.lower.drawScaled(canvas, this.x, this.y, scale);
+	    this.upper.drawScaled(canvas, this.x, this.y, scale);
+	    this.eyes.drawScaled (canvas, this.x, this.y, scale);
+	    this.hair.drawScaled (canvas, this.x, this.y, scale);
+	    this.acc.drawScaled  (canvas, this.x, this.y, scale);
+	  };
+
+	  this.drawScaledAtXY =  function(x,y,scale) {
+	  	this.skin.drawScaled (canvas, x, y, scale);
+	  	this.lower.drawScaled(canvas, x, y, scale);
+	    this.upper.drawScaled(canvas, x, y, scale);
+	    this.eyes.drawScaled (canvas, x, y, scale);
+	    this.hair.drawScaled (canvas, x, y, scale);
+	    this.acc.drawScaled  (canvas, x, y, scale);
+	  };
+
+	  this.move = function(){
+		
+			if(Math.floor(Math.random()*10) == 0){ // 1/3 chance of moving
+
+	  		this.x += Math.floor(Math.random()*7 - 3);
+	  		this.y += Math.floor(Math.random()*7 -3);
+	  	
+	  		}
+	  };
+
+	  this.isClicked = function(x, y){
+	  		return x>=this.x && x<=this.x+this.width && y>=this.y && y<=this.y+this.height;
+	  };
+
+	};
+
+	function getAcc(x){
+		return "acc"+(x+1);
+	};
+
+	function getHair(x){
+		return "hair"+(x+1);
+	};
+
+	function getSkin(x){
+		return "skin"+(x+1);
+	};
+
+	function getEyes(x){
+		return "eye"+(x+1);
+	};
+
+	function getUpper(x){
+		return "upper"+(x+1);
+	};
+
+	function getLower(x){
+		return "lower"+(x+1);
+	};
+
+	function generatePeople(num, CANVAS_WIDTH, CANVAS_HEIGHT, gender, NUM_ACC, NUM_HAIR, NUM_SKIN, NUM_EYES, NUM_UPPER, NUM_LOWER){
+		var people = [];
+		people[0] = new Person(Math.floor(Math.random()*CANVAS_WIDTH), 
+								Math.floor(Math.random()*CANVAS_HEIGHT - 60),
+								true, 
+								getAcc(Math.floor(Math.random()*NUM_ACC)), 
+								getHair(Math.floor(Math.random()*NUM_HAIR)),
+								getSkin(Math.floor(Math.random()*NUM_SKIN)),
+								getEyes(Math.floor(Math.random()*NUM_EYES)),
+								getUpper(Math.floor(Math.random()*NUM_UPPER)),
+								getLower(Math.floor(Math.random()*NUM_LOWER))
+								);
+							
+		for(var i=1;i<num;i++)
+		{
+			people[i] = new Person(Math.floor(Math.random()*CANVAS_WIDTH), 
+									Math.floor(Math.random()*CANVAS_HEIGHT - 60),
+									false,
+									getAcc(Math.floor(Math.random()*NUM_ACC)), 
+									getHair(Math.floor(Math.random()*NUM_HAIR)),
+									getSkin(Math.floor(Math.random()*NUM_SKIN)),
+									getEyes(Math.floor(Math.random()*NUM_EYES)),
+									getUpper(Math.floor(Math.random()*NUM_UPPER)),
+									getLower(Math.floor(Math.random()*NUM_LOWER))
+									);
+		}
+		return people;
+	};
+
+	function drawCanvasText(context, CANVAS_WIDTH, CANVAS_HEIGHT, lives, level, levelComplete, theOne) {
+		 // Fill Text
+		context.lineWidth=1;
+		context.fillStyle="#CC00FF";
+		context.lineStyle="#ffff00";
+		context.font="20px sans-serif";
+		
+		if(level == 0){
+			//context.fillText("Tap anywhere to play.", CANVAS_WIDTH/2 - 110, CANVAS_HEIGHT/2);
+		}
+		else if(level == 1 ){
+			//context.fillText("Lives: "+lives, 0, 20);
+			context.fillText("Find the one for you!", 80, 20);
+			context.fillText(theOne.clue1, 20, CANVAS_HEIGHT-30);
+			context.fillText(theOne.clue2, 20, CANVAS_HEIGHT-10);
+			context.fillText((Math.floor(level1_TimeLeft/1000))+"s", 600, CANVAS_HEIGHT- 20);
+			if(levelComplete)
+			{
+				context.fillText("       You found her!", CANVAS_WIDTH/2 - 80, CANVAS_HEIGHT/2);
+				context.fillText("Tap anywhere to continue.", CANVAS_WIDTH/2 - 80, CANVAS_HEIGHT/2 + 20)
+			}
+		}
+		else if(level == 2){
+			context.fillText(theOne.clue1, 20, CANVAS_HEIGHT-30);
+			context.fillText(theOne.clue2, 20, CANVAS_HEIGHT-10);
+			context.fillText((Math.floor(level2_TimeLeft/1000))+"s", 600, CANVAS_HEIGHT- 20);
+			/*
+			if(levelComplete)
+				context.fillText("Congratulations!", CANVAS_WIDTH/2, CANVAS_HEIGHT/2);
+			else if(isGameOver)
+				context.fillText("Game Over!", CANVAS_WIDTH/2 - 50, CANVAS_HEIGHT/2);
+			*/
+		}
+	}
+
+	function CreateButton(x,y,width,height,command,spriteName){
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		this.height = height;
+		this.command = command;
+		this.sprite = null;
+		if(spriteName!= "") 
+			this.sprite= Sprite(spriteName);
+
+		this.draw = function(){
+			this.sprite.draw(canvas, this.x, this.y);
+		};
+
+		this.isClicked = function(x,y){
+			return x>=this.x && x<=this.x+this.width && y>=this.y && y<=this.y+this.height;
+		};
+	}
+
+	function getButtonCommand(x,y,buttons){
+		var length = buttons.length;
+		for(var i=0;i<length;i++){
+			//alert("checking button "+i+" vs. "+x+" "+y+" with command "+buttons[i].command+"="+buttons[i].isClicked(x,y));
+			if(buttons[i].isClicked(x,y))
+				return buttons[i].command;
+		}
+		return "";
+	}
+
+	function createQuestion(context, x, y, question, choice1, choice2, choice3, choice4, correct){
+		this.x = x;
+		this.y = y;
+		this.question = question;
+		var choiceWidth = 513;
+		var choiceHeight = 81;
+		this.choice1 = new CreateButton(7,305, choiceWidth, choiceHeight, choice1, "answerbox");
+		this.choice2 = new CreateButton(7,370, choiceWidth, choiceHeight, choice2, "answerbox");
+		this.choice3 = new CreateButton(510,305, choiceWidth, choiceHeight, choice3, "answerbox");
+		this.choice4 = new CreateButton(510,370, choiceWidth, choiceHeight, choice4, "answerbox");
+		
+		switch(correct){
+			case 1: this.correct = this.choice1; break;
+			case 2: this.correct = this.choice2; break;
+			case 3: this.correct = this.choice3; break;
+			case 4: this.correct = this.choice4; break;
+		}
+
+		this.draw = function(){
+			context.fillText(question, 270, 120);
+			this.choice1.draw();
+			this.choice2.draw();
+			this.choice3.draw();
+			this.choice4.draw();
+			context.fillText(choice1, 60, 350);
+			context.fillText(choice2, 60, 420);
+			context.fillText(choice3, 560, 350);
+			context.fillText(choice4, 560, 420);
+		}
+	}
+
+
+	function createQuestions(context, buttons){
+		var questions = [];
+		var questionX = 320;
+		var questionY = 150;
+		questions.push(new createQuestion(context, questionX, questionY, 
+			"Would you rather be:",
+			"A Doctor", "A Programmer", "An Artist", "A Celebrity", 2));
+
+		questions.push(new createQuestion(context, questionX, questionY, 
+			"What do you think is the most important value in a relationship?",
+			"Financial Stability", "Love and Respect", "Looks", "God-Centered", 4));
+
+		questions.push(new createQuestion(context, questionX, questionY, 
+			"Do you believe in love at first sight?",
+			"Yes", "No", "It Depends", "Maybe", 2));
+
+		questions.push(new createQuestion(context, questionX, questionY, 
+			"How do you usually spend your free time?",
+			"Reading Books",  "Browse the Internet", "Watching T.V.", "Listening to Music", 1));
+
+		questions.push(new createQuestion(context, questionX, questionY, 
+			"Are you a morning person or a night person?",
+			"Morning Person", "Night Person", "Neither", "I don't really know", 1));
+
+		questions.push(new createQuestion(context, questionX, questionY, 
+			"If we got into an argument, how would we settle it?",
+			"I would say sorry to you.", "YOU would say sorry to me.", "I'll just buy you a drink and we'll be fine again.", "I'll listen to you. Nothing beats a calm conversation.", 4));
+
+		questions.push(new createQuestion(context, questionX, questionY, 
+			"Is religion important to you?",
+			"Yes", "A Little", "Not Much", "No", 1));
+
+		questions.push(new createQuestion(context, questionX, questionY, 
+			"If you were a food item, what would you be?",
+			"A hot wing; spicy, sultry, and tasty.", "Celery; boring but healthy.", "Tossed salad; a bunch of good qualities all thrown into one tasty dish.", "Fried snake; exotic.", 4));
+
+		return questions;
+	}
+	</script>
+</head>
+<body>
+<embed src="sounds/lullaby.mp3" autostart="true" hidden="true" loop="true">
+
+<script>
+//Initialization***************************************************************************************************************
+
+var CANVAS_WIDTH = 1024;
+var CANVAS_HEIGHT = 540;
+
+var canvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + "'></canvas>");
+var canvas = canvasElement.get(0).getContext("2d");
+canvasElement.appendTo('body');
+
+var backgrounds = {
+	mainMenu : Sprite("mainMenu"),
+	level1bg : Sprite("level1bg"),
+	level2bg : Sprite("level2bg"),
+	fail: Sprite("fail"),
+	success: Sprite("success"),
+	//about: Sprite("about")
+};
+
+
+var guySprite =  Sprite("guy");
+
+var FPS = 30;
+
+var NUM_ACC = 4;
+var NUM_HAIR = 10;
+var NUM_SKIN = 5;
+var NUM_EYES = 16;
+var NUM_UPPER = 10;
+var NUM_LOWER = 10;
+var NUM_PEOPLE;
+var level = 0;
+var people;
+var lives;
+var levelComplete;
+var gameIsWon;
+
+var level1_TimeLeft;
+var level2_TimeLeft;
+var timer;
+var updateDelay = 1000/FPS;
+
+
+var questions;
+var currQuestion;
+var totalCorrect;
+var isGameOver;
+var buttons = [];
+buttons.push(new CreateButton(CANVAS_WIDTH-168, CANVAS_HEIGHT-64, 168, 64, "quit", "quitButton"));
+
+var clues;
+
+initialize();
+var NUM_QUESTIONS = questions.length;
+
+
+function initialize(){
+	NUM_PEOPLE = 20;
+	people = generatePeople(NUM_PEOPLE, CANVAS_WIDTH, CANVAS_HEIGHT, NUM_ACC, NUM_HAIR, NUM_SKIN, NUM_EYES, NUM_UPPER, NUM_LOWER);
+	lives = 2;
+	levelComplete = false;
+	clues = people[0].clues;
+	buttons.splice(1, buttons.length - 1);
+	questions = createQuestions(canvas, buttons);
+	currQuestion = 0;
+	totalCorrect = 0;
+	level1_TimeLeft = 30000;
+	level2_TimeLeft = 30000;
+	timer = 0;
+	isGameOver = false;
+	gameIsWon = false;
+}
+
+//For Mouse clicks**************************************************************************************************************
+function getMousePos(canvas, evt) {
+        var rect = canvasElement.get(0).getBoundingClientRect();
+        return {
+          x: evt.clientX - rect.left,
+          y: evt.clientY - rect.top
+        };
+}
+
+canvasElement.get(0).addEventListener('click', function(evt) {
+	var mousePos = getMousePos(canvas, evt);
+	if(level == 0){
+		level++;
+		initialize();
+	}
+	else if(level==1 ){
+		if(getButtonCommand(mousePos.x, mousePos.y, buttons) == "quit")
+			level = 0;
+		else if(levelComplete){
+			level++;
+			levelComplete = false;
+		}
+		else if(lives <= 0){
+			var command = getButtonCommand(mousePos.x, mousePos.y, buttons);
+			if(command.equals("quit"))
+				level = 0;
+		}
+		else{
+			var indicesToRemove = [];
+		    for(var i=0;i<NUM_PEOPLE;i++){
+		    	if(people[i].isClicked(mousePos.x, mousePos.y)){
+		    		if(people[i].isTheOne)
+						levelComplete = true;
+					else{
+						lives--;
+						indicesToRemove.push(i);
+					}
+					break;
+				}
+		    }
+		    var length = indicesToRemove.length;
+		    for(var i=0;i<length; i++){
+		    	people.splice(indicesToRemove[i],1);
+			}
+		}
+    	NUM_PEOPLE -= length;
+	}
+	else if(level == 2){
+
+		if(!levelComplete && lives > 0){
+			buttons.push(questions[currQuestion].choice1);
+			buttons.push(questions[currQuestion].choice2);
+			buttons.push(questions[currQuestion].choice3);
+			buttons.push(questions[currQuestion].choice4);
+		}
+		
+		var command = getButtonCommand(mousePos.x, mousePos.y, buttons);
+	
+		if(getButtonCommand(mousePos.x, mousePos.y, buttons) == "quit")
+			level = 0;
+		else if(lives > 0 && !levelComplete && command == questions[currQuestion].correct.command){
+			totalCorrect++;
+			currQuestion++;
+			buttons.splice(1,4);
+		
+		}
+		else if(lives > 0 && command != ""){
+			lives--;
+			buttons.splice(1,4);
+			if(lives > 0)
+				currQuestion++;
+		}
+	}/*
+	else if(level == -1){
+		var command = getButtonCommand(mousePos.x, mousePos.y, buttons);
+		if(getButtonCommand(mousePos.x, mousePos.y, buttons) == "quit")
+			level = 0;
+	}*/
+    }, false);
+
+
+//Game Proper*******************************************************************************************************************
+setInterval(function() {
+  update();
+  draw();
+}, updateDelay);
+
+function update() {
+	if(level == 1){
+		if(lives <= 0 )
+			isGameOver = true;
+
+		if(!isGameOver && !levelComplete && lives > 0){
+			for(var i=0;i<NUM_PEOPLE;i++){
+				//make the crowd move randomly
+				people[i].move();
+				clamp(people[i], CANVAS_WIDTH, CANVAS_HEIGHT);
+			}
+
+			if((level1_TimeLeft -= updateDelay) <= 0){
+				level1_TimeLeft = 0;
+				isGameOver = true;
+			}
+		}
+	}
+	else if(level == 2){
+		if(!isGameOver && !levelComplete){
+
+			if((level2_TimeLeft-=updateDelay) < 0){
+				level2_TimeLeft = 0;
+				isGameOver = true;
+			}
+			if(currQuestion >= NUM_QUESTIONS)
+				levelComplete = true;
+
+			if(lives <= 0 )
+				isGameOver = true;
+		}
+		if(levelComplete)
+			gameIsWon = true;
+	}	
+
+}
+
+var heartSprite = Sprite("heart");
+
+function draw() {
+  	canvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+  
+  	if(level == 0){
+  		backgrounds.mainMenu.draw(canvas,0,0);
+  	}
+  	else{
+
+  		if(isGameOver){
+  			backgrounds.fail.draw(canvas, 0, 0);
+  			people[0].drawScaledAtXY(250,100,1);
+		  	guySprite.draw(canvas, 700, 100);
+  			//draw buttons
+		  	var length = buttons.length;
+		 	for(var i=0;i<length;i++){
+		 		if(buttons[i].sprite!=null)
+		 			buttons[i].draw();
+	  		} 
+  		}
+  		else if(gameIsWon){
+  			backgrounds.success.draw(canvas, 0, 0);
+  			people[0].drawScaledAtXY(350,180,1);
+		  	guySprite.draw(canvas, 650, 180);
+  			//draw buttons
+		  	var length = buttons.length;
+		 	for(var i=0;i<length;i++){
+		 		if(buttons[i].sprite!=null)
+		 			buttons[i].draw();
+	  		} 
+  		}
+  		else{
+  			if(level == 1){
+		  	//draw background
+		  	backgrounds.level1bg.draw(canvas, 0, 0);
+
+		  	//draw all people
+			var length = people.length;
+			for(var i=0;i<length;i++){
+				people[i].draw();
+			}
+		  }
+		  else if(level == 2){
+		  	backgrounds.level2bg.draw(canvas, 0, 0);
+		  	//drawbackground
+		  	people[0].drawScaledAtXY(300,180,1);
+		  	guySprite.draw(canvas, 700, 180);
+
+		  	if(!levelComplete){
+		  		questions[currQuestion].draw();
+			}
+
+		  }
+		  /*
+		  else if(level == -1){ //about screen
+		  	backgrounds.about.draw(canvas, 0, 0);
+		  }*/
+
+		  	//draw buttons
+		  	var length = buttons.length;
+		 	for(var i=0;i<length;i++){
+		 		if(buttons[i].sprite!=null)
+		 			buttons[i].draw();
+	  		} 
+	  		//draw lives
+	  		if(lives > 0){
+	  			heartSprite.draw(canvas, 710, CANVAS_HEIGHT - 60);
+	  			if(lives > 1){
+	  				heartSprite.draw(canvas, 780, CANVAS_HEIGHT-60);
+	  			}
+	  		}
+  			drawCanvasText(canvas, CANVAS_WIDTH, CANVAS_HEIGHT, lives, level, levelComplete, people[0]);
+  		}
+  	}
+}
+
+</script>
+<div style = "position: fixed; z-index: 1; top: 10; left: 15; width:100; height:100"><a href="https://twitter.com/intent/tweet?button_hashtag=&lt;3&text=To all those singles out there, try this! #<3" class="twitter-hashtag-button" data-lang="en" data-related="mobile app" data-size = "large"> <img src = "images\tweet.png" width = 32, height = 32 ></a></div>
+</body>
+</html>
